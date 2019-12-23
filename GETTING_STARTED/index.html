@@ -1,0 +1,74 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>My first three.js app</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+
+</head>
+
+<body>
+    <script>
+        // https://threejs.org/docs/#manual/en/introduction/Creating-a-scene
+        console.log(THREE)
+			var scene = new THREE.Scene();
+            /* There are many different types of cameras
+             * 1 - The first arguemnt is the FOV (field of view) which is extent of scene seen on display (in degrees)
+             * 2 - Aspect ratio (always use width of element divided by height) so image doesnt look squished (ratio of width to height)
+             * 3 - near clipping plane (values closer than this value arent rendered)
+             * 4 - far clipping (values farther than this arent rendered)
+            */
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+            /* Size which we want our app rendered , Use width and height of area we want to fill our app
+                - Takes a third argument (true or false) where you can render atlower resoultion
+            */
+            
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            // Render the <canvas>
+            document.body.appendChild(renderer.domElement);
+
+            /************************** CUBE **************************/
+
+            // Vertices
+            var geometry = new THREE.BoxGeometry(1, 1, 1);
+            // Material to color, input is an object of properties
+            var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+            // Object taking a geometry and applying material to it which we can add to a scene
+            var cube = new THREE.Mesh(geometry, material);
+            // Add cube to scene
+            scene.add(cube);
+
+            // Since the add() method adds to (0,0,0), the camera and cube are inside eachother
+            // Thus we move the cube to the forefront more
+            camera.position.z = 5;
+
+            /*********************** Rendering the scene ********************/
+            // Create loop to draw scene every time screen refreshed (60 times a second)
+            // Benefit instead of setInterval is pauses when go to another screen saving power
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+    </script>
+
+</body>
+
+</html>
